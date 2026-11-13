@@ -4,464 +4,327 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>노O현의 8비트 자기소개</title>
-    <style>
-        /* 레트로 픽셀 폰트 불러오기 */
-        @font-face {
-            font-family: 'DungGeunMo';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
+<!-- ▼ 방명록·OX 투표 (4차시) ▼ -->
+<sb-widget id="sb-web" style="display:block;width:100%;max-width:640px;margin:32px auto;flex:1 1 100%;grid-column:1/-1;align-self:stretch;box-sizing:border-box"></sb-widget>
+<script>
+(function () {
+  var C = {"id":"sb-web","url":"https://script.google.com/macros/s/AKfycbxkEXUowAb9l04b3myZFvgdPHw8mNyBmxQpDQGv1Rjm66CuNbBV-AP9l6IWSOVqSLz8cg/exec","q":"노우현은 지금 피곤하다","title":"방명록","sel":"","pos":"after"};
+  var host = document.getElementById(C.id);
+  if (!host || host.sbReady) return;
+  host.sbReady = true;
+  var PREVIEW = !!window.__SB_PREVIEW;
 
-        :root {
-            --bg-color: #111;
-            --text-color: #fff;
-            --neon-green: #39ff14;
-            --neon-pink: #ff007f;
-            --neon-yellow: #fdfd96;
-            --neon-blue: #0ff;
-            --border-style: 4px solid var(--text-color);
-        }
+  function place() {
+    if (!C.sel) return;
+    var t = null;
+    try { t = document.querySelector(C.sel); } catch (e) {}
+    if (!t || t === host || t.contains(host) || !t.parentNode) return;
+    if (C.pos === 'before') { if (t.previousElementSibling !== host) t.parentNode.insertBefore(host, t); }
+    else if (t.nextElementSibling !== host) t.parentNode.insertBefore(host, t.nextSibling);
+  }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'DungGeunMo', sans-serif;
-        }
+  function rgb(s) { var m = (s || '').match(/[\d.]+/g); return m ? m.map(Number) : null; }
+  function lum(c) { return (0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]) / 255; }
+  function pageBg() {
+    var el = host.parentElement;
+    while (el) { var c = rgb(getComputedStyle(el).backgroundColor); if (c && (c.length < 4 || c[3] > 0.5)) return c; el = el.parentElement; }
+    return [255, 255, 255];
+  }
+  function accent() {
+    var els = document.querySelectorAll('button, .btn, a, h1, h2');
+    for (var i = 0; i < els.length && i < 60; i++) {
+      if (host.contains(els[i])) continue;
+      var cs = getComputedStyle(els[i]);
+      var list = [cs.backgroundColor, cs.color];
+      for (var j = 0; j < 2; j++) {
+        var c = rgb(list[j]);
+        if (!c || (c.length > 3 && c[3] < 0.5)) continue;
+        var mx = Math.max(c[0], c[1], c[2]), mn = Math.min(c[0], c[1], c[2]);
+        if (mx - mn > 60 && lum(c) > 0.2 && lum(c) < 0.8) return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
+      }
+    }
+    return '#E5486F';
+  }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-        }
+  var root = host.attachShadow ? host.attachShadow({ mode: 'open' }) : host;
+  root.innerHTML = '<' + 'style>' +
+    '.wrap{display:flex;flex-direction:column;gap:16px}' +
+    '.card{box-sizing:border-box;font-family:inherit;font-size:16px;line-height:1.6;text-align:left;border-radius:16px;padding:20px;background:rgba(255,255,255,.94);color:#222;border:1px solid rgba(0,0,0,.1);box-shadow:0 4px 18px rgba(0,0,0,.08)}' +
+    '.dark .card{background:rgba(20,20,28,.9);color:#f3f3f6;border-color:rgba(255,255,255,.18)}' +
+    '.card *{box-sizing:border-box;font-family:inherit}' +
+    'h3{margin:0 0 12px;font-size:20px;line-height:1.35;color:inherit}' +
+    '.row{display:flex;gap:8px;flex-wrap:wrap}' +
+    'input,textarea{flex:1 1 140px;min-width:0;font-size:16px;padding:10px 12px;border-radius:10px;border:1px solid #ccc;background:#fff;color:inherit}' +
+    '.dark input,.dark textarea{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.08)}' +
+    'textarea{flex-basis:100%;resize:vertical;min-height:70px}' +
+    'button{font-size:16px;font-weight:700;border:0;border-radius:10px;padding:10px 18px;cursor:pointer;background:var(--a,#E5486F);color:#fff}' +
+    'button:disabled{opacity:.45;cursor:default}' +
+    '.msg{margin:8px 0 0;font-size:14px;min-height:1em;opacity:.85}' +
+    '.list{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:340px;overflow:auto}' +
+    '.list li{padding:10px 12px;border-radius:10px;background:rgba(0,0,0,.04);word-break:break-all}.dark .list li{background:rgba(255,255,255,.07)}' +
+    '.list b{margin-right:6px}.list small{opacity:.6;font-size:12px}.list p{margin:2px 0 0;white-space:pre-wrap}' +
+    '.top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px;font-size:14px;opacity:.85}' +
+    '.top .re{background:transparent;color:inherit;border:1px solid currentColor;padding:4px 10px;font-size:13px;font-weight:400;opacity:.8}' +
+    '.live{display:inline-flex;align-items:center;gap:6px}.live:before{content:"";width:8px;height:8px;border-radius:50%;background:#1BA672;box-shadow:0 0 0 0 rgba(27,166,114,.6);animation:pulse 1.6s infinite}' +
+    '@keyframes pulse{70%{box-shadow:0 0 0 7px rgba(27,166,114,0)}100%{box-shadow:0 0 0 0 rgba(27,166,114,0)}}' +
+    '.ox{display:flex;gap:10px}.ox button{flex:1;font-size:28px;padding:10px 0;box-shadow:inset 0 -4px 0 rgba(0,0,0,.18)}' +
+    '.ox .o{background:linear-gradient(#ff7fa3,#e5486f)}.ox .x{background:linear-gradient(#7d9bff,#4a6cf7)}' +
+    '.mine{outline:3px solid #222;outline-offset:2px}.dark .mine{outline-color:#fff}' +
+    '.legend{display:flex;justify-content:space-between;font-size:15px;font-weight:700;margin-top:14px}' +
+    '.legend .lo{color:#e5486f}.legend .lx{color:#4a6cf7}' +
+    '.tube{position:relative;margin-top:6px;height:64px}' +
+    '.tube canvas{display:block;width:100%;height:64px}' +
+    '.tilt{margin:8px 0 0;font-weight:700;text-align:center;min-height:1.6em}' +
+    '</' + 'style><div class="wrap"><div class="card oxc"></div><div class="card gbc"></div></div>';
+  var wrap = root.querySelector('.wrap');
+  function theme() {
+    try { wrap.classList.toggle('dark', lum(pageBg()) < 0.4); wrap.style.setProperty('--a', accent()); } catch (e) {}
+  }
 
-        h1, h2, h3 {
-            text-align: center;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-        }
+  function flagKey(k) { return 'sb-done:' + k + ':' + C.url; }
+  var mem = {};
+  function getFlag(k) { if (PREVIEW) return mem[k]; try { return localStorage.getItem(flagKey(k)); } catch (e) { return mem[k]; } }
+  function setFlag(k, v) { mem[k] = v; if (PREVIEW) return; try { localStorage.setItem(flagKey(k), v); } catch (e) {} }
 
-        .container {
-            width: 100%;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function time(v) {
+    var d = new Date(v); if (isNaN(d)) return '';
+    function p(n) { return (n < 10 ? '0' : '') + n; }
+    return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+  function norm(list) {
+    if (!Array.isArray(list)) throw new Error('bad');
+    return list.map(function (r) { var o = {}; for (var k in r) o[String(k).trim()] = r[k]; return o; });
+  }
+  var demo = { O: 6, X: 3, '방명록': [{ '시간': new Date().toISOString(), '닉네임': '예시 방문자', '내용': '미리보기용 예시 글이에요. 실제 페이지에서는 방문자가 남긴 글이 보여요.' }] };
+  function api(q) { return C.url + (C.url.indexOf('?') < 0 ? '?' : '&') + q; }
+  function load(sheet) {
+    if (PREVIEW) return Promise.resolve(demo[sheet].slice());
+    return fetch(api('sheet=' + encodeURIComponent(sheet))).then(function (r) { return r.json(); }).then(norm);
+  }
+  function loadCount() {
+    if (PREVIEW) return Promise.resolve({ O: demo.O, X: demo.X });
+    return fetch(api('count=OX')).then(function (r) { return r.json(); }).then(function (c) {
+      if (!c || typeof c.O !== 'number') throw new Error('bad'); return c;
+    });
+  }
+  // 저장 요청: 서버가 바쁘면 잠시 기다렸다가 최대 3번까지 다시 보내기
+  function send(data, tries) {
+    if (PREVIEW) return Promise.reject(new Error('preview'));
+    tries = tries || 0;
+    return fetch(C.url, { method: 'POST', body: JSON.stringify(data) }).then(function (r) { return r.text(); }).then(function (t) {
+      if (t.indexOf('"ok"') < 0) throw new Error('busy'); return t;
+    }).catch(function (e) {
+      if (tries >= 3) throw e;
+      return new Promise(function (ok) { setTimeout(ok, 1500 * (tries + 1) + Math.random() * 1500); }).then(function () { return send(data, tries + 1); });
+    });
+  }
+  // 주기적으로 다시 불러오기: 실패하면 간격을 늘리고, 탭이 안 보이면 쉬기
+  function poll(fn, base) {
+    var fails = 0;
+    function next() { setTimeout(tick, base * Math.min(5, 1 + fails) + Math.random() * 2000); }
+    function tick() {
+      if (document.hidden) { next(); return; }
+      Promise.resolve(fn()).then(function (ok) { fails = ok === false ? fails + 1 : 0; next(); }, function () { fails++; next(); });
+    }
+    next();
+  }
+  function slow(m) { setTimeout(function () { if (m.textContent === '저장 중…') m.textContent = '저장 중… 지금 참여하는 사람이 많아서 조금 걸려요. 창을 닫지 말고 기다려 주세요.'; }, 4000); }
+  function failText(e) {
+    return e && e.message === 'preview' ? '미리보기에서는 저장되지 않아요. GitHub에 올린 뒤 시험해요.' : '서버와 연결하지 못했어요. 잠시 뒤 다시 눌러 보세요.';
+  }
 
-        .section {
-            border: var(--border-style);
-            padding: 20px;
-            background: #000;
-            box-shadow: 8px 8px 0px rgba(255, 255, 255, 0.2);
-            position: relative;
-        }
+  function placeAndTheme() { place(); theme(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', placeAndTheme); else placeAndTheme();
+  window.addEventListener('load', function () { placeAndTheme(); setTimeout(placeAndTheme, 500); });
 
-        .section::before {
-            content: '';
-            position: absolute;
-            top: 2px; left: 2px; right: 2px; bottom: 2px;
-            border: 2px dashed #444;
-            pointer-events: none;
-        }
+  buildOX(root.querySelector('.oxc'));
+  buildGB(root.querySelector('.gbc'));
 
-        /* 깜빡이는 효과 */
-        .blink {
-            animation: blinker 1s linear infinite;
-        }
-        @keyframes blinker {
-            50% { opacity: 0; }
-        }
+  // ---------- OX 투표: 액체 게이지 ----------
+  function buildOX(card) {
+    card.appendChild(el('h3', '', 'Q. ' + (C.q || '')));
+    var box = el('div', 'ox'); var bo = el('button', 'o', 'O'); var bx = el('button', 'x', 'X');
+    box.appendChild(bo); box.appendChild(bx);
+    var msg = el('p', 'msg');
+    var lg = el('div', 'legend'); var lo = el('span', 'lo', 'O 0명'); var lx = el('span', 'lx', 'X 0명'); lg.appendChild(lo); lg.appendChild(lx);
+    var tube = el('div', 'tube'); var cv = el('canvas'); tube.appendChild(cv);
+    var tilt = el('p', 'tilt');
+    var top = el('div', 'top'); var count = el('span', 'live', '불러오는 중…'); var re = el('button', 're', '↻ 새로고침');
+    top.appendChild(count); top.appendChild(re);
+    [box, msg, lg, tube, tilt, top].forEach(function (x) { card.appendChild(x); });
 
-        /* 공통 버튼 스타일 */
-        button {
-            background-color: transparent;
-            color: var(--neon-green);
-            border: 2px solid var(--neon-green);
-            padding: 10px 15px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-transform: uppercase;
-        }
-        button:hover {
-            background-color: var(--neon-green);
-            color: #000;
-        }
-        button:active {
-            transform: translate(2px, 2px);
-        }
-        button:disabled {
-            border-color: #555;
-            color: #555;
-            cursor: not-allowed;
-            background: transparent;
-        }
+    var o = 0, x = 0, target = 0.5, pos = 0.5, vel = 0, t0 = 0, running = false, seen = true;
+    var bubbles = [];
+    for (var i = 0; i < 14; i++) bubbles.push({ s: i % 2, x: Math.random(), y: Math.random(), r: 1 + Math.random() * 2.2, v: 0.15 + Math.random() * 0.35 });
+    var calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        /* 텍스트 입력창 */
-        input[type="text"] {
-            background: #000;
-            border: 2px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 10px;
-            font-size: 1rem;
-            width: calc(100% - 100px);
-            margin-right: 5px;
-        }
-        input[type="text"]:focus {
-            outline: none;
-            box-shadow: 0 0 5px var(--neon-blue);
-        }
+    function mark() {
+      var f = getFlag('OX'); if (!f) return;
+      bo.disabled = bx.disabled = true;
+      (f === 'O' ? bo : bx).classList.add('mine');
+      msg.textContent = '내 선택: ' + f + ' · 참여해 줘서 고마워요!';
+    }
+    mark();
+    function setCounts(no, nx) {
+      o = no; x = nx;
+      var n = o + x;
+      target = n ? o / n : 0.5;
+      lo.textContent = 'O ' + o + '명'; lx.textContent = 'X ' + x + '명';
+      count.textContent = n ? '실시간 · 총 ' + n + '명 참여' : '실시간 · 아직 아무도 투표하지 않았어요';
+      tilt.textContent = !n ? '첫 번째로 눌러 보세요!' : o > x ? 'O 쪽으로 기울었어요' : o < x ? 'X 쪽으로 기울었어요' : '팽팽해요!';
+      kick();
+    }
+    function show(c) {
+      if (c.O !== o || c.X !== x || count.textContent.indexOf('불러오는') === 0) setCounts(c.O, c.X);
+    }
+    var busy = false;
+    function refresh() {
+      if (busy) return true; busy = true;
+      return loadCount().then(function (c) { busy = false; show(c); return true; }, function () { busy = false; if (!(o + x)) count.textContent = '결과를 불러오지 못했어요. 잠시 뒤 다시 시도해요.'; return false; });
+    }
+    re.addEventListener('click', refresh);
+    function vote(v) {
+      if (getFlag('OX')) return;
+      bo.disabled = bx.disabled = true; msg.textContent = '저장 중…'; slow(msg);
+      if (PREVIEW) { msg.textContent = failText(new Error('preview')); bo.disabled = bx.disabled = false; return; }
+      send({ sheet: 'OX', '답': v }).then(function () { setFlag('OX', v); mark(); setCounts(o + (v === 'O' ? 1 : 0), x + (v === 'X' ? 1 : 0)); setTimeout(refresh, 1500); },
+        function (e) { msg.textContent = failText(e); bo.disabled = bx.disabled = false; });
+    }
+    bo.addEventListener('click', function () { vote('O'); });
+    bx.addEventListener('click', function () { vote('X'); });
 
-        /* 1. 환영 인사 */
-        .greeting-area {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .greeting-area input { flex-grow: 1; min-width: 150px; }
-        #greeting-msg {
-            color: var(--neon-yellow);
-            min-height: 24px;
-            margin-top: 10px;
-        }
+    // 그리기
+    var ctx = cv.getContext && cv.getContext('2d');
+    function size() {
+      var w = cv.clientWidth || 300, h = 64, d = window.devicePixelRatio || 1;
+      if (cv.width !== Math.round(w * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); }
+      return { w: w, h: h, d: d };
+    }
+    function capsule(c, x0, y0, w, h) {
+      var r = h / 2;
+      c.beginPath(); c.moveTo(x0 + r, y0); c.lineTo(x0 + w - r, y0); c.arc(x0 + w - r, y0 + r, r, -Math.PI / 2, Math.PI / 2);
+      c.lineTo(x0 + r, y0 + h); c.arc(x0 + r, y0 + r, r, Math.PI / 2, Math.PI * 1.5); c.closePath();
+    }
+    function liquid(c, x0, y0, w, h, edge, left, cols) {
+      var g = c.createLinearGradient(0, y0, 0, y0 + h);
+      g.addColorStop(0, cols[0]); g.addColorStop(0.45, cols[1]); g.addColorStop(1, cols[2]);
+      c.beginPath();
+      var steps = 24, k;
+      if (left) { c.moveTo(x0 - 2, y0 - 2); for (k = 0; k <= steps; k++) c.lineTo(edge(y0 + h * k / steps), y0 + h * k / steps); c.lineTo(x0 - 2, y0 + h + 2); }
+      else { c.moveTo(x0 + w + 2, y0 - 2); for (k = 0; k <= steps; k++) c.lineTo(edge(y0 + h * k / steps), y0 + h * k / steps); c.lineTo(x0 + w + 2, y0 + h + 2); }
+      c.closePath(); c.fillStyle = g; c.fill();
+    }
+    function frame(ts) {
+      if (!ctx) return;
+      if (!t0) t0 = ts;
+      var t = (ts - t0) / 1000;
+      vel += (target - pos) * 0.018; vel *= 0.9; pos += vel;
+      var S = size(), w = S.w, h = S.h, c = ctx;
+      c.setTransform(S.d, 0, 0, S.d, 0, 0); c.clearRect(0, 0, w, h);
+      var pad = 3, X0 = pad, Y0 = pad, W = w - pad * 2, H = h - pad * 2;
+      // 유리관 그림자
+      c.save(); capsule(c, X0, Y0 + 2, W, H); c.fillStyle = 'rgba(0,0,0,.10)'; c.fill(); c.restore();
+      c.save(); capsule(c, X0, Y0, W, H); c.clip();
+      c.fillStyle = '#e9e9f1'; c.fillRect(X0, Y0, W, H);
+      var amp = calm ? 1 : 4.5 + Math.min(12, Math.abs(vel) * 1000);
+      var lean = Math.max(-18, Math.min(18, vel * 2600));
+      var bx0 = X0 + W * pos;
+      function edge(y) {
+        var u = (y - Y0) / H;
+        return bx0 + Math.sin(u * 6.2 + t * 3.1) * amp * 0.6 + Math.sin(u * 11 - t * 4.7) * amp * 0.4 + (u - 0.5) * lean;
+      }
+      liquid(c, X0, Y0, W, H, edge, true, ['#ff9dbb', '#e5486f', '#a3224a']);
+      liquid(c, X0, Y0, W, H, edge, false, ['#9fb5ff', '#4a6cf7', '#2a3fb0']);
+      // 앞쪽 물결(반투명): 겹쳐 흐르는 입체감
+      function edge2(y) { var u = (y - Y0) / H; return edge(y) + Math.sin(u * 4 - t * 2.3) * (calm ? 1 : 7); }
+      c.globalAlpha = 0.35;
+      liquid(c, X0, Y0, W, H, edge2, true, ['#ffc2d4', '#f06b90', '#c23a62']);
+      liquid(c, X0, Y0, W, H, edge2, false, ['#c6d3ff', '#6f8bff', '#3b52c9']);
+      c.globalAlpha = 1;
+      // 경계 거품
+      c.beginPath(); for (var k = 0; k <= 24; k++) { var yy = Y0 + H * k / 24; if (k) c.lineTo(edge(yy), yy); else c.moveTo(edge(yy), yy); }
+      c.strokeStyle = 'rgba(255,255,255,.75)'; c.lineWidth = 2.5; c.stroke();
+      // 거품 방울
+      bubbles.forEach(function (b) {
+        if (!calm) { b.y -= b.v * 0.012; if (b.y < -0.1) { b.y = 1.1; b.x = Math.random(); } }
+        var bx = b.s ? X0 + W * pos + (W * (1 - pos)) * b.x : X0 + W * pos * b.x;
+        var by = Y0 + H * b.y + Math.sin(t * 2 + b.x * 9) * 1.5;
+        if (Math.abs(bx - edge(by)) < 6) return;
+        c.beginPath(); c.arc(bx, by, b.r, 0, Math.PI * 2); c.fillStyle = 'rgba(255,255,255,.45)'; c.fill();
+      });
+      // 유리 입체감: 위쪽 반사광, 아래쪽 그림자
+      var gl = c.createLinearGradient(0, Y0, 0, Y0 + H);
+      gl.addColorStop(0, 'rgba(255,255,255,.55)'); gl.addColorStop(0.28, 'rgba(255,255,255,.08)'); gl.addColorStop(0.62, 'rgba(255,255,255,0)'); gl.addColorStop(1, 'rgba(0,0,0,.22)');
+      c.fillStyle = gl; c.fillRect(X0, Y0, W, H);
+      c.beginPath(); c.moveTo(X0 + H * 0.5, Y0 + H * 0.2); c.lineTo(X0 + W - H * 0.5, Y0 + H * 0.2);
+      c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 3; c.lineCap = 'round'; c.stroke();
+      // 가운데 기준선
+      c.beginPath(); c.setLineDash([3, 4]); c.moveTo(X0 + W / 2, Y0 + 4); c.lineTo(X0 + W / 2, Y0 + H - 4);
+      c.strokeStyle = 'rgba(255,255,255,.7)'; c.lineWidth = 1.5; c.stroke(); c.setLineDash([]);
+      // 글자
+      var n = o + x, po = n ? Math.round(o / n * 100) : 50;
+      c.font = '700 16px system-ui, sans-serif'; c.textBaseline = 'middle'; c.fillStyle = '#fff';
+      c.shadowColor = 'rgba(0,0,0,.35)'; c.shadowBlur = 3;
+      if (W * pos > 70) { c.textAlign = 'left'; c.fillText('O ' + (n ? po + '%' : ''), X0 + 18, Y0 + H / 2); }
+      if (W * (1 - pos) > 70) { c.textAlign = 'right'; c.fillText((n ? 100 - po + '% ' : '') + 'X', X0 + W - 18, Y0 + H / 2); }
+      c.shadowBlur = 0;
+      c.restore();
+      c.save(); capsule(c, X0, Y0, W, H); c.strokeStyle = 'rgba(0,0,0,.15)'; c.lineWidth = 1; c.stroke(); c.restore();
+      var still = Math.abs(target - pos) < 0.0005 && Math.abs(vel) < 0.00005;
+      if (seen && (!calm || !still)) requestAnimationFrame(frame); else running = false;
+    }
+    function kick() { if (!running && ctx) { running = true; requestAnimationFrame(frame); } }
+    if (window.IntersectionObserver) new IntersectionObserver(function (en) { seen = en[0].isIntersecting; if (seen) kick(); }).observe(tube);
+    window.addEventListener('resize', kick);
+    kick();
+    refresh();
+    // 실시간: 화면에 보이는 동안 몇 초마다 개수를 다시 불러오기(폴링)
+    poll(function () {
+      if (!seen) return true;
+      if (PREVIEW) { if (Math.random() < 0.5) demo.O++; else demo.X++; }
+      return refresh();
+    }, PREVIEW ? 2500 : 6000);
+  }
 
-        /* 2. 좋아하는 것 (플립 카드) */
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-        }
-        .card {
-            background-color: transparent;
-            width: 100%;
-            height: 120px;
-            perspective: 1000px;
-            cursor: pointer;
-        }
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        .card.is-flipped .card-inner {
-            transform: rotateY(180deg);
-        }
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--text-color);
-            padding: 10px;
-            font-size: 1.1rem;
-        }
-        .card-front {
-            background-color: #222;
-            color: var(--text-color);
-        }
-        .card-back {
-            background-color: var(--neon-pink);
-            color: #fff;
-            transform: rotateY(180deg);
-            font-size: 0.9rem;
-            border-color: var(--neon-pink);
-        }
+  // ---------- 방명록 ----------
+  function buildGB(card) {
+    card.appendChild(el('h3', '', C.title || '방명록'));
+    var form = el('div', 'row');
+    var nick = el('input'); nick.placeholder = '닉네임 (10자까지)'; nick.maxLength = 10;
+    var text = el('textarea'); text.placeholder = '남기고 싶은 말 (100자까지)'; text.maxLength = 100;
+    var btn = el('button', '', '남기기');
+    form.appendChild(nick); form.appendChild(text); form.appendChild(btn);
+    var msg = el('p', 'msg');
+    var top = el('div', 'top'); var count = el('span', '', '불러오는 중…'); var re = el('button', 're', '↻ 새로고침');
+    top.appendChild(count); top.appendChild(re);
+    var ul = el('ul', 'list');
+    [form, msg, top, ul].forEach(function (x) { card.appendChild(x); });
+    function lock() { form.style.display = 'none'; msg.textContent = '방명록을 남겼어요. 고마워요!'; }
+    if (getFlag('GB')) lock();
+    var last = -1;
+    function show(list) {
+      var key = list.length + '|' + JSON.stringify(list[list.length - 1] || '');
+      if (key === last) return; last = key;
+      ul.innerHTML = '';
+      count.textContent = list.length >= 50 ? '최근 방명록 50개' : '방명록 ' + list.length + '개';
+      list.slice().reverse().forEach(function (r) {
+        var li = el('li'); li.appendChild(el('b', '', r['닉네임'] || '익명')); li.appendChild(el('small', '', time(r['시간'])));
+        li.appendChild(el('p', '', r['내용'] || '')); ul.appendChild(li);
+      });
+    }
+    function refresh(force) { if (force) last = -1; return load('방명록').then(function (l) { show(l); return true; }, function () { if (last === -1) count.textContent = '목록을 불러오지 못했어요. 잠시 뒤 다시 시도해요.'; return false; }); }
+    re.addEventListener('click', function () { count.textContent = '불러오는 중…'; refresh(true); });
+    btn.addEventListener('click', function () {
+      var n = nick.value.trim(), t = text.value.trim();
+      if (!n || !t) { msg.textContent = '닉네임과 내용을 모두 써 주세요.'; return; }
+      btn.disabled = true; msg.textContent = '저장 중…'; slow(msg);
+      send({ sheet: '방명록', '닉네임': n, '내용': t }).then(function () { setFlag('GB', '1'); lock(); refresh(true); }, function (e) { msg.textContent = failText(e); btn.disabled = false; });
+    });
+    refresh(true);
+    if (!PREVIEW) poll(function () { return refresh(); }, 20000);
+  }
+})();
 
-        /* 3. OX 퀴즈 */
-        .quiz-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 15px;
-        }
-        .btn-o { border-color: var(--neon-blue); color: var(--neon-blue); font-size: 1.5rem; width: 60px; height: 60px;}
-        .btn-o:hover { background-color: var(--neon-blue); color: #000; }
-        .btn-x { border-color: var(--neon-pink); color: var(--neon-pink); font-size: 1.5rem; width: 60px; height: 60px;}
-        .btn-x:hover { background-color: var(--neon-pink); color: #000; }
-        
-        #quiz-result {
-            margin-top: 15px;
-            text-align: center;
-            min-height: 24px;
-            transition: all 0.3s;
-        }
-        /* 정답/오답 애니메이션 */
-        .success-anim { animation: successFlash 0.5s 3; color: var(--neon-yellow); }
-        .fail-anim { animation: shake 0.5s; color: var(--neon-pink); }
-        
-        @keyframes successFlash {
-            0%, 100% { background-color: transparent; }
-            50% { background-color: var(--neon-green); color: #000; }
-        }
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
-        }
-
-        /* 4. 오늘의 운세 */
-        .fortune-section { text-align: center; }
-        #fortune-text {
-            margin-top: 20px;
-            padding: 15px;
-            border: 2px dotted var(--neon-yellow);
-            color: var(--neon-yellow);
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            word-break: keep-all;
-        }
-
-        /* 5. 미니게임 */
-        .minigame-section { text-align: center; }
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 15px 0;
-            font-size: 1.2rem;
-            color: var(--neon-blue);
-        }
-        #btn-mash {
-            width: 100%;
-            height: 80px;
-            font-size: 1.5rem;
-            margin-top: 10px;
-            border-style: dashed;
-        }
-        
-        .game-title {
-            color: var(--neon-pink);
-            text-shadow: 2px 2px #000;
-        }
-
-    </style>
-</head>
-<body>
-
-    <h1 class="game-title blink">노O현's PROFILE</h1>
-
-    <div class="container">
-        
-        <!-- 1. 환영 인사 섹션 -->
-        <div class="section">
-            <h2>[ INSERT COIN ]</h2>
-            <p style="margin-bottom: 10px; font-size: 0.9rem;">당신의 닉네임을 입력하세요</p>
-            <div class="greeting-area">
-                <input type="text" id="visitor-name" placeholder="플레이어 이름">
-                <button onclick="greetVisitor()">입력</button>
-            </div>
-            <div id="greeting-msg"></div>
-        </div>
-
-        <!-- 2. 좋아하는 것 섹션 (플립 카드) -->
-        <div class="section">
-            <h2>[ FAVORITE THINGS ]</h2>
-            <p style="text-align: center; font-size: 0.8rem; margin-bottom: 15px;">카드를 클릭하여 뒤집어보세요!</p>
-            <div class="cards-container">
-                <div class="card" onclick="this.classList.toggle('is-flipped')">
-                    <div class="card-inner">
-                        <div class="card-front">💤 잠</div>
-                        <div class="card-back">눈 감았다 떴는데 아침이면 억울하지만 그래도 제일 짜릿함.</div>
-                    </div>
-                </div>
-                <div class="card" onclick="this.classList.toggle('is-flipped')">
-                    <div class="card-inner">
-                        <div class="card-front">🏠 집</div>
-                        <div class="card-back">이불 밖은 위험지대. 몬스터(스트레스)가 너무 많음.</div>
-                    </div>
-                </div>
-                <div class="card" onclick="this.classList.toggle('is-flipped')">
-                    <div class="card-inner">
-                        <div class="card-front">🎮 게임</div>
-                        <div class="card-back">현실 로그아웃, 판타지 로그인! 렙업은 인생보다 쉽다.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. OX 퀴즈 섹션 -->
-        <div class="section">
-            <h2>[ OX QUIZ ]</h2>
-            <p style="text-align: center;">Q. "노O현은 지금 피곤하다"</p>
-            <div class="quiz-buttons">
-                <button class="btn-o" onclick="checkQuiz('O')">O</button>
-                <button class="btn-x" onclick="checkQuiz('X')">X</button>
-            </div>
-            <div id="quiz-result">정답을 선택하세요!</div>
-        </div>
-
-        <!-- 4. 오늘의 운세 섹션 -->
-        <div class="section fortune-section">
-            <h2>[ DAILY FORTUNE ]</h2>
-            <button onclick="drawFortune()" style="width: 100%;">운세 뽑기 (1회 0원)</button>
-            <div id="fortune-text">버튼을 눌러 오늘의 운세를 확인하세요.</div>
-        </div>
-
-        <!-- 5. 미니게임 섹션 -->
-        <div class="section minigame-section">
-            <h2>[ MINI GAME ]</h2>
-            <p>10초 동안 버튼을 미친듯이 연타하세요!</p>
-            <div class="stats">
-                <div>TIME: <span id="time-left">10</span>s</div>
-                <div>SCORE: <span id="score">0</span></div>
-            </div>
-            <button id="btn-start" onclick="startGame()">▶ 게임 시작 ◀</button>
-            <button id="btn-mash" onclick="mashButton()" disabled>연타!!!</button>
-        </div>
-
-    </div>
-
-    <script>
-        // --- 1. 환영 인사 기능 ---
-        function greetVisitor() {
-            const name = document.getElementById('visitor-name').value.trim();
-            const msgBox = document.getElementById('greeting-msg');
-            if(name === "") {
-                msgBox.innerText = "이름을 입력해야 퀘스트를 시작할 수 있습니다.";
-                msgBox.style.color = "var(--neon-pink)";
-            } else {
-                msgBox.innerHTML = `> 환영합니다, 용사 [ <span style="color:#fff">${name}</span> ]님!<br>> 노O현의 세계에 로그인하셨습니다.`;
-                msgBox.style.color = "var(--neon-green)";
-            }
-        }
-
-        // --- 3. OX 퀴즈 기능 ---
-        function checkQuiz(answer) {
-            const resultBox = document.getElementById('quiz-result');
-            
-            // 기존 애니메이션 클래스 제거
-            resultBox.classList.remove('success-anim', 'fail-anim');
-            void resultBox.offsetWidth; // 리플로우 강제 발생 (애니메이션 재시작을 위해)
-
-            if (answer === 'O') {
-                resultBox.innerText = "SUCCESS! 정답입니다! 숨 쉬는 것조차 피곤한 상태입니다.";
-                resultBox.classList.add('success-anim');
-            } else {
-                resultBox.innerText = "GAME OVER! 오답입니다. 내 다크서클을 보고도 그런 말이 나오십니까?";
-                resultBox.classList.add('fail-anim');
-            }
-        }
-
-        // --- 4. 오늘의 운세 기능 ---
-        const fortunes = [
-            "오늘 밤엔 꿀잠을 자게 될 확률 99.9%",
-            "가다 서다 반복하다 길에서 만원짜리를 주울 지도?",
-            "오늘 저녁 메뉴 선택은 대성공! 미각이 춤을 춥니다.",
-            "예상치 못한 곳에서 반가운 연락이 옵니다. (스팸 아님)",
-            "게임에서 원하던 아이템을 득템할 운세입니다. 가챠 고고!",
-            "오늘은 뭘 해도 귀찮은 날. 그냥 누워있는 게 최고입니다.",
-            "와이파이가 빵빵하게 터지는 하루! 로딩 스트레스 제로.",
-            "누군가 당신에게 작지만 확실한 칭찬을 해줄 것입니다.",
-            "방 정리를 하다 잃어버린 줄 알았던 비상금을 발견합니다!",
-            "오늘은 뭘 해도 평타 이상 치는 운수 좋은 날!",
-            "커피나 음료수를 무료로 얻어마실 기회가 생깁니다.",
-            "집에 돌아가는 길이 평소보다 빠르고 쾌적하게 느껴질 것입니다."
-        ];
-
-        function drawFortune() {
-            const fortuneBox = document.getElementById('fortune-text');
-            // 섞는 효과를 위한 짧은 딜레이 애니메이션
-            let count = 0;
-            const shuffle = setInterval(() => {
-                fortuneBox.innerText = fortunes[Math.floor(Math.random() * fortunes.length)];
-                count++;
-                if (count > 10) {
-                    clearInterval(shuffle);
-                    const finalIdx = Math.floor(Math.random() * fortunes.length);
-                    fortuneBox.innerHTML = `<span style="color:var(--neon-green);">★</span> ${fortunes[finalIdx]} <span style="color:var(--neon-green);">★</span>`;
-                }
-            }, 50);
-        }
-
-        // --- 5. 미니게임 (10초 연타) 기능 ---
-        let score = 0;
-        let timeLeft = 10;
-        let gameTimer;
-        let isPlaying = false;
-
-        const timeDisplay = document.getElementById('time-left');
-        const scoreDisplay = document.getElementById('score');
-        const btnStart = document.getElementById('btn-start');
-        const btnMash = document.getElementById('btn-mash');
-
-        function startGame() {
-            if(isPlaying) return;
-            
-            // 초기화
-            score = 0;
-            timeLeft = 10;
-            isPlaying = true;
-            scoreDisplay.innerText = score;
-            timeDisplay.innerText = timeLeft;
-            
-            // 버튼 상태 변경
-            btnStart.disabled = true;
-            btnMash.disabled = false;
-            btnStart.innerText = "게임 진행 중...";
-            btnMash.style.backgroundColor = "var(--neon-pink)";
-            btnMash.style.color = "#000";
-
-            // 타이머 시작
-            gameTimer = setInterval(() => {
-                timeLeft--;
-                timeDisplay.innerText = timeLeft;
-                
-                if(timeLeft <= 0) {
-                    endGame();
-                }
-            }, 1000);
-        }
-
-        function mashButton() {
-            if(!isPlaying) return;
-            score++;
-            scoreDisplay.innerText = score;
-            
-            // 누를 때마다 살짝 줄어드는 효과
-            btnMash.style.transform = "scale(0.95)";
-            setTimeout(() => { btnMash.style.transform = "scale(1)"; }, 50);
-        }
-
-        function endGame() {
-            clearInterval(gameTimer);
-            isPlaying = false;
-            
-            btnStart.disabled = false;
-            btnMash.disabled = true;
-            btnStart.innerText = "▶ 다시 하기 ◀";
-            btnMash.style.backgroundColor = "transparent";
-            btnMash.style.color = "#555";
-            
-            let rank = "";
-            if(score >= 80) rank = "S (연타의 신!)";
-            else if(score >= 60) rank = "A (오락실 고수)";
-            else if(score >= 40) rank = "B (평범한 게이머)";
-            else rank = "C (나무늘보급 속도)";
-
-            // 결과 박스에 점수와 랭크 출력 (alert 대신)
-            btnMash.innerHTML = `종료!<br>내 기록: ${score}회 / 등급: ${rank}`;
-            setTimeout(() => {
-                if(!isPlaying) btnMash.innerText = "연타!!!";
-            }, 3000);
-        }
-    </script>
-</body>
-</html>
+</script>
+<!-- ▲ 방명록·OX 투표 끝 ▲ -->
